@@ -59,6 +59,7 @@ type TailOptions struct {
 	Etag               types.ETag
 	Since              time.Time
 	Raw                bool
+	Job                string // Updated to singular form to match usage
 	EndEventDetectFunc TailDetectStopEventFunc
 }
 
@@ -172,7 +173,12 @@ func Tail(ctx context.Context, client client.Client, params TailOptions) error {
 	} else {
 		since = timestamppb.New(params.Since)
 	}
-	serverStream, err := client.Tail(ctx, &defangv1.TailRequest{Services: params.Services, Etag: params.Etag, Since: since})
+	serverStream, err := client.Tail(ctx, &defangv1.TailRequest{
+		Services: params.Services,
+		Etag:     params.Etag,
+		Since:    since,
+		Job:      params.Job, // Pass the Jobs parameter
+	})
 	if err != nil {
 		return err
 	}

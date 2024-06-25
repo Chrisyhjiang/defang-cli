@@ -219,6 +219,7 @@ func SetupCommands(version string) {
 	tailCmd.Flags().BoolP("raw", "r", false, "show raw (unparsed) logs")
 	tailCmd.Flags().StringP("since", "S", "", "show logs since duration/time")
 	tailCmd.Flags().Bool("utc", false, "show logs in UTC timezone (ie. TZ=UTC)")
+	tailCmd.Flags().String("job", "", "shows logs filtered by jobs") // Add the job flag definition
 	RootCmd.AddCommand(tailCmd)
 
 	// Delete Command
@@ -631,6 +632,7 @@ var tailCmd = &cobra.Command{
 		var raw, _ = cmd.Flags().GetBool("raw")
 		var since, _ = cmd.Flags().GetString("since")
 		var utc, _ = cmd.Flags().GetBool("utc")
+		var job, _ = cmd.Flags().GetString("job") // Ensure the flag is defined with usage string
 
 		if utc {
 			os.Setenv("TZ", "") // used by Go's "time" package, see https://pkg.go.dev/time#Location
@@ -656,8 +658,8 @@ var tailCmd = &cobra.Command{
 			Etag:     etag,
 			Since:    ts,
 			Raw:      raw,
+			Job:      job,
 		}
-
 		return cli.Tail(cmd.Context(), client, tailOptions)
 	},
 }

@@ -185,6 +185,7 @@ message TailRequest {
   repeated string services = 1;
   google.protobuf.Timestamp since = 2;
   string etag = 3;
+  string job = 4; // Added job field for filtering
 }
 
 message LogEntry {
@@ -194,6 +195,7 @@ message LogEntry {
   string service = 4;
   string etag = 5;
   string host = 6;
+  string job = 7; // Added job field
 }
 
 message TailResponse {
@@ -202,6 +204,7 @@ message TailResponse {
   string service = 3;
   string etag = 4;
   string host = 5;
+  string job = 6; // Added job field to response
 }
 
 message ListServicesResponse {
